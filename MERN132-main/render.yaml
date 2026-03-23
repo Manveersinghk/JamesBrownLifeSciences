@@ -1,0 +1,47 @@
+# render.yaml — place this in your PROJECT ROOT (same level as client/ and server/)
+# Render reads this file to auto-configure your services.
+# Docs: https://render.com/docs/render-yaml-spec
+
+services:
+  # ── Backend API + Frontend static serving ─────────────────────────────────
+  - type: web
+    name: jbls-server
+    runtime: node
+    region: oregon           # or frankfurt for EU users
+    plan: free               # upgrade to starter ($7/mo) for always-on
+
+    # Render runs this from the repo root
+    rootDir: .
+    buildCommand: cd client && npm install && npm run build && cd ../server && npm install
+    startCommand: cd server && node index.js
+
+    # Health check — Render pings this to confirm your app is up
+    healthCheckPath: /health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000          # Render assigns its own port via $PORT — this is a fallback
+
+      # Set these in Render dashboard → Environment tab (not here for security)
+      - key: MONGO_URI
+        sync: false           # means "set this manually in dashboard"
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_SECURE
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: HR_EMAIL
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

@@ -1,0 +1,296 @@
+@import "tailwindcss";
+
+/* ── Google Fonts ─────────────────────────────────────────────────────────────
+   Add this to client/index.html <head>:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+*/
+
+@theme {
+  /* ── Brand colours ── */
+  --color-primary:       #0A0F1E;
+  --color-primary-light: #131929;
+  --color-primary-dark:  #050810;
+
+  --color-secondary:       #0EA5E9;
+  --color-secondary-light: #38BDF8;
+  --color-secondary-dark:  #0284C7;
+
+  --color-accent:       #F59E0B;
+  --color-accent-hover: #D97706;
+
+  /* ── Apple-style font stack ── */
+  --font-sans:  "DM Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  --font-serif: "DM Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+
+  /* ── Animations ── */
+  --animate-fade-in-up:    fadeInUp    0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in:       fadeIn      0.5s ease forwards;
+  --animate-slide-in-left: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-in:      scaleIn     0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Global reset & base ──────────────────────────────────────────────────────*/
+*, *::before, *::after {
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  -webkit-font-smoothing:  antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html { scroll-behavior: smooth; }
+body { letter-spacing: -0.01em; }
+
+/* ── Premium scrollbar ────────────────────────────────────────────────────────*/
+::-webkit-scrollbar             { width: 6px; height: 6px; }
+::-webkit-scrollbar-track       { background: transparent; }
+::-webkit-scrollbar-thumb       { background: rgba(14,165,233,0.3); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(14,165,233,0.6); }
+
+/* ── Selection colour ─────────────────────────────────────────────────────────*/
+::selection      { background: rgba(14,165,233,0.2); color: inherit; }
+::-moz-selection { background: rgba(14,165,233,0.2); color: inherit; }
+
+/* ── Keyframes ────────────────────────────────────────────────────────────────*/
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-18px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.4; }
+  100% { transform: scale(1.8); opacity: 0;   }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.5; transform: scale(1);    }
+  50%       { opacity: 1;   transform: scale(1.06); }
+}
+
+@keyframes rotate3d {
+  0%   { transform: perspective(1000px) rotateY(0deg);   }
+  100% { transform: perspective(1000px) rotateY(360deg); }
+}
+
+/* ── Animation delay utilities ────────────────────────────────────────────────*/
+@utility delay-75   { animation-delay: 75ms;   }
+@utility delay-100  { animation-delay: 100ms;  }
+@utility delay-150  { animation-delay: 150ms;  }
+@utility delay-200  { animation-delay: 200ms;  }
+@utility delay-300  { animation-delay: 300ms;  }
+@utility delay-400  { animation-delay: 400ms;  }
+@utility delay-500  { animation-delay: 500ms;  }
+@utility delay-600  { animation-delay: 600ms;  }
+@utility delay-700  { animation-delay: 700ms;  }
+@utility delay-1000 { animation-delay: 1000ms; }
+
+/* ── Float animation ──────────────────────────────────────────────────────────*/
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ── Shimmer text ─────────────────────────────────────────────────────────────*/
+.text-shimmer {
+  background: linear-gradient(90deg, #38BDF8 0%, #ffffff 40%, #38BDF8 60%, #0EA5E9 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ── Glass morphism ───────────────────────────────────────────────────────────*/
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Premium button glow ──────────────────────────────────────────────────────*/
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+.btn-glow:hover::before { opacity: 1; }
+.btn-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(14,165,233,0.3), 0 0 0 1px rgba(14,165,233,0.15);
+}
+.btn-glow:active { transform: translateY(0); }
+
+/* ── Card hover lift ──────────────────────────────────────────────────────────*/
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 32px 64px rgba(0,0,0,0.1), 0 0 0 1px rgba(14,165,233,0.08);
+}
+
+/* ── Stagger children ─────────────────────────────────────────────────────────*/
+.stagger > * {
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms;   }
+.stagger > *:nth-child(2) { animation-delay: 80ms;  }
+.stagger > *:nth-child(3) { animation-delay: 160ms; }
+.stagger > *:nth-child(4) { animation-delay: 240ms; }
+.stagger > *:nth-child(5) { animation-delay: 320ms; }
+.stagger > *:nth-child(6) { animation-delay: 400ms; }
+
+/* ── Gradient border ──────────────────────────────────────────────────────────*/
+.gradient-border {
+  position: relative;
+  border-radius: 1.25rem;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(14,165,233,0.35), rgba(245,158,11,0.15), rgba(14,165,233,0.08));
+  z-index: -1;
+}
+
+/* ── Ambient blob ─────────────────────────────────────────────────────────────*/
+.blob-teal {
+  background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: breathe 6s ease-in-out infinite;
+}
+.blob-amber {
+  background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: breathe 8s ease-in-out infinite 2s;
+}
+
+/* ── Pulse dot ────────────────────────────────────────────────────────────────*/
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  position: relative;
+}
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(34,197,94,0.4);
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* ── Section divider ─────────────────────────────────────────────────────────*/
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(14,165,233,0.2), transparent);
+}
+
+/* ── Premium tag ─────────────────────────────────────────────────────────────*/
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(14,165,233,0.08);
+  border: 1px solid rgba(14,165,233,0.18);
+  color: #38BDF8;
+}
+.chatbot-input:focus {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ── Hover lift ──────────────────────────────────────────────────────────────*/
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+}
+
+/* ── Input premium focus ─────────────────────────────────────────────────────*/
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.12), 0 1px 3px rgba(0,0,0,0.05);
+  border-color: rgba(14,165,233,0.45) !important;
+  background-color: #fff !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Smooth page fade on route change ───────────────────────────────────────*/
+main > * {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* ── Focus visible ────────────────────────────────────────────────────────────*/
+:focus-visible {
+  outline: 2px solid rgba(14,165,233,0.55);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Noise overlay (add class "noise" to any element) ───────────────────────*/
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* ── Legacy gallery support ──────────────────────────────────────────────────*/
+.gallery-container { perspective: 1000px; }
+.gallery-rotator   { transform-style: preserve-3d; animation: rotate3d 20s linear infinite; }
+.gallery-item      { position: absolute; transform-style: preserve-3d; }

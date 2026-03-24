@@ -76,7 +76,9 @@ router.post(
 
             user.lastLogin = new Date();
             await user.save();
-
+            const { sendWelcomeEmail } = require('../config/mailer');
+            // Inside POST /register, after user is created:
+            sendWelcomeEmail(user).catch(err => console.error('Welcome email error:', err.message));
             console.log(`✅ New user registered: ${email}`);
             return sendToken(res, user, 201);
         } catch (err) {

@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { CartProvider } from './context/CartContext';
 import Checkout from './pages/Checkout';
+import Orders         from './pages/Orders';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Redirect logged-in users away from login/register pages
 const GuestRoute = ({ children }) => {
@@ -32,6 +34,8 @@ function AppLayout() {
                         <Route path="/products" element={<Products />} />
                         <Route path="/careers"  element={<Careers />} />
                         <Route path="/contact"  element={<Contact />} />
+                        <Route path="/orders"    element={<Orders />} />
+                        <Route path="/admin"     element={<AdminDashboard />} />
                         <Route path="/order/checkout" element={<Checkout />} />
                         <Route path="/login"    element={<GuestRoute><Login /></GuestRoute>} />
                         <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />

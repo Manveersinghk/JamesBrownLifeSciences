@@ -133,3 +133,42 @@ router.get('/:orderNumber', protect, async (req, res) => {
 });
 
 module.exports = router;
+
+// ── GET /api/orders/admin/all — admin sees all orders ─────────────────────────
+router.get('/admin/all', protect, async (req, res) => {
+    if (req.user.role !== 'Admin') {
+        return res.status(403).json({ error: 'Admin access required.' });
+    }
+    try {
+        const orders = await Order.find()
+            .sort({ createdAt: -1 })
+            .select('orderNumber status totalAmount items customerName email phone address notes createdAt');
+        return res.json({ success: true, orders });
+    } catch (err) {
+        return res.status(500).json({ error: 'Failed to fetch orders.' });
+    }
+});
+
+// ── PATCH /api/orders/admin/:orderNumber/status — update status ───────────────
+router.patch('/admin/:orderNumber/status', protect, async (req, res) => {
+    if (req.user.role !== 'Admin') {
+        return res.status(403).json({ error: 'Admin access required.' });
+    }
+    const { status } = req.body;
+    const validStatuses = ['pending','confirmed','processing','dispatched','delivered','cancelled'];
+    if (!validStatuses.includes(status)) {
+        return res.status(400).json({ error: 'Invalid status.' });
+    }
+    try {
+        const order = await Order.findOneAndUpdate(
+            { orderNumber: req.params.orderNumber },
+            { status },
+            { new: true }
+        );
+        if (!order) return res.status(404).json({ error: 'Order not found.' });
+        console.log(`📦 Order ${order.orderNumber} → ${status} by ${req.user.email}`);
+        return res.json({ success: true, order });
+    } catch (err) {
+        return res.status(500).json({ error: 'Failed to update status.' });
+    }
+});

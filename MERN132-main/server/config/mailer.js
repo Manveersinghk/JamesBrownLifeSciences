@@ -285,6 +285,40 @@ const sendOrderNotification = async (order) => {
     console.log(`📧 Order notification sent for ${order.orderNumber}`);
 };
 
-// module.exports = { sendContactNotification, sendCareerNotification, sendOrderNotification };
+// ── Welcome email on registration ─────────────────────────────────────────────
+const sendWelcomeEmail = async (user) => {
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) return;
+    const transporter = createTransporter();
+    const FROM_JBLS = `"James Brown Life Sciences" <${process.env.SMTP_USER}>`;
+    await transporter.sendMail({
+        from: FROM_JBLS,
+        to:   user.email,
+        subject: `Welcome to James Brown Life Sciences, ${user.firstName}!`,
+        html: `
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+                <div style="background:#0F172A;padding:28px 32px;border-radius:16px 16px 0 0;text-align:center">
+                    <h1 style="color:#38BDF8;margin:0;font-size:22px;font-weight:800;letter-spacing:-0.5px">James Brown Life Sciences</h1>
+                    <p style="color:#94A3B8;margin:6px 0 0;font-size:13px">Pharmaceutical Excellence</p>
+                </div>
+                <div style="background:#F8FAFC;padding:32px;border:1px solid #E2E8F0;border-top:none;border-radius:0 0 16px 16px">
+                    <p style="color:#1E293B;font-size:16px;font-weight:700">Welcome aboard, ${user.firstName}! 👋</p>
+                    <p style="color:#475569;font-size:14px;line-height:1.7">Your account has been created successfully. You can now browse our pharmaceutical catalogue and place bulk medicine orders directly through the portal.</p>
+                    <div style="background:#EFF6FF;border-left:4px solid #0EA5E9;border-radius:0 10px 10px 0;padding:16px 20px;margin:20px 0">
+                        <p style="margin:0;font-size:13px;color:#1E40AF;font-weight:700">What you can do now:</p>
+                        <ul style="margin:8px 0 0;padding-left:18px;color:#3B82F6;font-size:13px;line-height:2">
+                            <li>Browse 200+ pharmaceutical formulations</li>
+                            <li>Place bulk medicine orders online</li>
+                            <li>Track your order status in real time</li>
+                            <li>Contact our team for partnership enquiries</li>
+                        </ul>
+                    </div>
+                    <p style="color:#475569;font-size:14px;line-height:1.7">For any assistance, reach us at <a href="mailto:supportjamesbrown@gmail.com" style="color:#0EA5E9">supportjamesbrown@gmail.com</a> or call <strong>+91 97998 32489</strong>.</p>
+                    <p style="color:#94A3B8;font-size:12px;margin:24px 0 0;border-top:1px solid #E2E8F0;padding-top:16px">James Brown Life Sciences · Khatipura, Jaipur, Rajasthan 302012 · Mon–Sat 9am–6pm IST</p>
+                </div>
+            </div>
+        `,
+    });
+    console.log(`📧 Welcome email sent to ${user.email}`);
+};
 
-module.exports = { sendContactNotification, sendCareerNotification, sendOrderNotification };
+module.exports = { sendContactNotification, sendCareerNotification, sendOrderNotification, sendWelcomeEmail };

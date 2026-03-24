@@ -60,8 +60,9 @@ const Checkout = () => {
 
     // ── Send OTP ──────────────────────────────────────────────────────────────
     const handleSendOtp = async () => {
-        if (!phone || !/^\+?[1-9]\d{7,14}$/.test(phone.replace(/\s/g, ''))) {
-            setError('Please enter a valid phone number with country code. e.g. +919876543210');
+        const digits = phone.replace(/\D/g, '');
+        if (!phone || digits.length < 10) {
+            setError('Please enter a valid 10-digit Indian mobile number.');
             return;
         }
         setLoading(true);
@@ -345,7 +346,7 @@ const Checkout = () => {
                                         {loading ? '...' : otpSent ? (otpTimer > 0 ? `Resend (${otpTimer}s)` : 'Resend OTP') : 'Send OTP'}
                                     </button>
                                 </div>
-                                <p className="text-xs text-gray-400 mt-2">Include country code. e.g. +91 for India, +1 for US</p>
+                                <p className="text-xs text-gray-400 mt-2">Enter your 10-digit Indian mobile number. e.g. 9876543210</p>
                             </div>
 
                             {otpSent && (

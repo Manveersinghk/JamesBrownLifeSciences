@@ -180,20 +180,39 @@ export default function ChatBot() {
 
                 {/* Input */}
                 <div style={{ padding:'10px 14px 14px', borderTop:'1px solid rgba(255,255,255,0.04)' }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 12px 8px 16px', borderRadius:16, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', transition:'border-color .2s' }}
-                        onFocusCapture={e => e.currentTarget.style.borderColor='rgba(14,165,233,0.35)'}
-                        onBlurCapture={e => e.currentTarget.style.borderColor='rgba(255,255,255,0.08)'}>
+                    <style>{`
+                        .chatbot-input {
+                            background: #ffffff !important;
+                            color: #111827 !important;
+                            caret-color: #0EA5E9;
+                        }
+                        .chatbot-input::placeholder { color: #9ca3af !important; }
+                        .chatbot-input:focus, .chatbot-input:active {
+                            background: #ffffff !important;
+                            color: #111827 !important;
+                        }
+                        .chatbot-input:-webkit-autofill,
+                        .chatbot-input:-webkit-autofill:focus {
+                            -webkit-box-shadow: 0 0 0 9999px #ffffff inset !important;
+                            -webkit-text-fill-color: #111827 !important;
+                            transition: background-color 9999s ease-in-out 0s !important;
+                        }
+                    `}</style>
+                    <div style={{ display:'flex', alignItems:'center', gap:8, padding:'6px 10px 6px 14px', borderRadius:16, background:'#ffffff', border:'1px solid #e5e7eb', transition:'border-color .2s' }}
+                        onFocusCapture={e => e.currentTarget.style.borderColor='rgba(14,165,233,0.5)'}
+                        onBlurCapture={e => e.currentTarget.style.borderColor='#e5e7eb'}>
                     
                         <input ref={inputRef} type="text" className="chatbot-input" value={input}
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();} }}
                             placeholder="Ask anything about JBLS..."
+                            autoComplete="off"
                             disabled={busy}
-                            style={{ flex:1, background:'transparent', border:'none', outline:'none', color:'rgba(226,232,240,0.9)', fontSize:13, caretColor:'#0EA5E9', fontFamily:'inherit' }}
+                            style={{ flex:1, background:'#ffffff', border:'none', outline:'none', color:'#111827', fontSize:13, caretColor:'#0EA5E9', fontFamily:'inherit' }}
                         />
                         <button onClick={() => send()} disabled={!input.trim()||busy}
                             style={{ width:32, height:32, borderRadius:10, border:'none', cursor: input.trim()&&!busy ? 'pointer':'default', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .2s',
-                                background: input.trim()&&!busy ? 'linear-gradient(135deg,#0EA5E9,#0284C7)' : 'rgba(255,255,255,0.06)',
+                                background: input.trim()&&!busy ? 'linear-gradient(135deg,#0EA5E9,#0284C7)' : '#e5e7eb',
                                 opacity: input.trim()&&!busy ? 1 : 0.4,
                                 transform:'scale(1)',
                             }}

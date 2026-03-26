@@ -183,7 +183,7 @@ const OrderDetail = ({ order, onClose }) => {
                                         </div>
                                         <div>
                                             <p style={{ fontSize: 12, fontWeight: 700, color: isFirst ? 'rgba(226,232,240,0.85)' : 'rgba(148,163,184,0.4)' }}>{sc.label}</p>
-                                            <p style={{ fontSize: 11, color: 'rgba(100,116,139,0.35)', marginTop: 1 }}>{fmtDate(order.createdAt)}</p>
+                                            <p style={{ fontSize: 11, color: 'rgba(100,116,139,0.6)', marginTop: 1 }}>{fmtDate(order.createdAt)}</p>
                                         </div>
                                     </div>
                                 );
@@ -195,7 +195,7 @@ const OrderDetail = ({ order, onClose }) => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                         <BC style={{ padding: '18px 20px', flex: 1 }}>
                             <p style={{ fontSize: 9, fontWeight: 700, color: 'rgba(148,163,184,0.3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 10 }}>Delivery Address</p>
-                            <p style={{ fontSize: 13, color: 'rgba(226,232,240,0.6)', lineHeight: 1.8 }}>
+                            <p style={{ fontSize: 13, color: 'rgba(226,232,240,0.75)', lineHeight: 1.8 }}>
                                 {order.address?.line1}{order.address?.line2 ? `, ${order.address.line2}` : ''}<br />
                                 {order.address?.city}, {order.address?.state} – {order.address?.pincode}<br />
                                 {order.address?.country}
@@ -204,7 +204,7 @@ const OrderDetail = ({ order, onClose }) => {
                         <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid rgba(14,165,233,0.1)', borderRadius: 16, padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                             <div>
                                 <p style={{ fontSize: 12, fontWeight: 700, color: 'rgba(226,232,240,0.7)', marginBottom: 2 }}>Need help?</p>
-                                <p style={{ fontSize: 11, color: 'rgba(148,163,184,0.4)' }}>We confirm orders by call</p>
+                                <p style={{ fontSize: 11, color: 'rgba(148,163,184,0.65)' }}>We confirm orders by call</p>
                             </div>
                             <a href="tel:+919799832489" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 99, background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.2)', color: '#38BDF8', fontSize: 12, fontWeight: 700, textDecoration: 'none', flexShrink: 0 }}>
                                 <svg width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.08 6.08l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -279,7 +279,7 @@ const OrderRow = ({ order, onClick }) => {
                                 <Badge status={order.status} />
                             </div>
                             {/* Medicine names preview */}
-                            <p style={{ fontSize: 11.5, color: 'rgba(148,163,184,0.5)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 260 }}>
+                            <p style={{ fontSize: 11.5, color: 'rgba(148,163,184,0.75)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 260 }}>
                                 {medicines}
                             </p>
                         </div>
@@ -289,7 +289,7 @@ const OrderRow = ({ order, onClick }) => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                         <div style={{ textAlign: 'right' }}>
                             <p style={{ fontSize: 17, fontWeight: 800, color: '#38BDF8', letterSpacing: '-0.03em', lineHeight: 1 }}>₹{fmt(order.totalAmount)}</p>
-                            <p style={{ fontSize: 10, color: 'rgba(148,163,184,0.35)', marginTop: 3 }}>{order.items?.length} item{order.items?.length !== 1 ? 's' : ''}</p>
+                            <p style={{ fontSize: 10, color: 'rgba(148,163,184,0.6)', marginTop: 3 }}>{order.items?.length} item{order.items?.length !== 1 ? 's' : ''}</p>
                         </div>
                         <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                             <svg width="11" height="11" fill="none" stroke="rgba(148,163,184,0.35)" strokeWidth="2.2" strokeLinecap="round" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
@@ -306,7 +306,7 @@ const OrderRow = ({ order, onClick }) => {
                     </span>
                     {/* City chip */}
                     {order.address?.city && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 9px', borderRadius: 99, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', fontSize: 10.5, color: 'rgba(148,163,184,0.45)', fontWeight: 500 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 9px', borderRadius: 99, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', fontSize: 10.5, color: 'rgba(148,163,184,0.7)', fontWeight: 500 }}>
                             <svg width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 4.97 7 13 7 13s7-8.03 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
                             {order.address.city}, {order.address.state}
                         </span>
@@ -375,7 +375,7 @@ const Orders = () => {
                                 My Orders
                             </div>
                             <h1 style={{ fontSize: 28, fontWeight: 800, color: '#F1F5F9', letterSpacing: '-0.04em', lineHeight: 1, margin: 0 }}>Order History</h1>
-                            <p style={{ fontSize: 12, color: 'rgba(148,163,184,0.4)', marginTop: 5 }}>Real-time delivery tracking for all your orders</p>
+                            <p style={{ fontSize: 12, color: 'rgba(148,163,184,0.65)', marginTop: 5 }}>Real-time delivery tracking for all your orders</p>
                         </div>
 
                         {/* Orders count */}
@@ -410,8 +410,8 @@ const Orders = () => {
                                 const col    = tab.key === 'all' ? '#38BDF8' : (STATUS[tab.key]?.color || '#38BDF8');
                                 return (
                                     <button key={tab.key} onClick={() => setFilter(tab.key)} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 13px', borderRadius: 99, cursor: 'pointer', border: active ? `1px solid ${col}35` : '1px solid rgba(255,255,255,0.07)', background: active ? `${col}0d` : 'rgba(255,255,255,0.025)', transition: 'all 0.18s' }}>
-                                        <span style={{ fontSize: 12, fontWeight: 600, color: active ? col : 'rgba(148,163,184,0.45)' }}>{tab.label}</span>
-                                        <span style={{ fontSize: 10, fontWeight: 700, color: active ? col : 'rgba(100,116,139,0.3)', background: active ? `${col}18` : 'rgba(255,255,255,0.04)', border: `1px solid ${active ? `${col}25` : 'rgba(255,255,255,0.06)'}`, borderRadius: 99, padding: '1px 6px' }}>{count}</span>
+                                        <span style={{ fontSize: 12, fontWeight: 600, color: active ? col : 'rgba(148,163,184,0.65)' }}>{tab.label}</span>
+                                        <span style={{ fontSize: 10, fontWeight: 700, color: active ? col : 'rgba(148,163,184,0.45)', background: active ? `${col}18` : 'rgba(255,255,255,0.04)', border: `1px solid ${active ? `${col}25` : 'rgba(255,255,255,0.06)'}`, borderRadius: 99, padding: '1px 6px' }}>{count}</span>
                                     </button>
                                 );
                             })}
@@ -475,8 +475,8 @@ const Orders = () => {
                                 <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <svg width="15" height="15" fill="none" stroke="rgba(56,189,248,0.6)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">{item.d}</svg>
                                 </div>
-                                <p style={{ color: 'rgba(226,232,240,0.65)', fontSize: 12, fontWeight: 700 }}>{item.title}</p>
-                                <p style={{ color: 'rgba(148,163,184,0.32)', fontSize: 11, lineHeight: 1.6 }}>{item.desc}</p>
+                                <p style={{ color: 'rgba(226,232,240,0.8)', fontSize: 12, fontWeight: 700 }}>{item.title}</p>
+                                <p style={{ color: 'rgba(148,163,184,0.6)', fontSize: 11, lineHeight: 1.6 }}>{item.desc}</p>
                             </div>
                         ))}
                     </div>

@@ -163,98 +163,106 @@ export default function Contact() {
                 <div className="w-full max-w-screen-2xl mx-auto px-6 sm:px-10 lg:px-16">
                     <div className="flex items-center gap-3 mb-10">
                         <div className="w-8 h-px bg-secondary" />
-                        <span className="text-secondary font-bold tracking-widest uppercase text-xs">Our Office</span>
+                        <span className="text-secondary font-bold tracking-widest uppercase text-xs">Our Offices</span>
                     </div>
 
-                    {/* Single office — full width, beautiful layout */}
-                    <div className="bg-primary rounded-3xl overflow-hidden shadow-2xl">
-                        <div className="grid md:grid-cols-2">
+                    <div className="grid md:grid-cols-2 gap-6">
 
-                            {/* Left — address + map feel */}
-                            <div className="p-10 lg:p-14 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-[80px] pointer-events-none" />
+                        {/* ── HQ — Gandhidham ── */}
+                        <div className="bg-primary rounded-3xl overflow-hidden shadow-2xl">
+                            <div className="p-8 lg:p-10 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-secondary/10 rounded-full blur-[70px] pointer-events-none" />
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-3 mb-6">
-                                        <span className="text-4xl">🇮🇳</span>
+                                        <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                                            <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                        </div>
                                         <div>
-                                            <h3 className="text-2xl font-serif font-bold text-white">Jaipur</h3>
-                                            <p className="text-secondary text-sm font-bold uppercase tracking-widest">Headquarters</p>
+                                            <h3 className="text-xl font-bold text-white" style={{ letterSpacing:'-0.01em' }}>Gandhidham</h3>
+                                            <p className="text-secondary text-xs font-bold uppercase tracking-widest">Headquarters</p>
                                         </div>
                                     </div>
-
-                                    <div className="space-y-5">
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                </svg>
+                                    <div className="space-y-4">
+                                        {[
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>, label:'Address', value: 'Gandhidham, Gujarat 370201, India' },
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>, label:'Phone', value: '+91 79760 32489', href:'tel:+917976032489' },
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>, label:'Email', value: 'supportjamesbrown@gmail.com', href:'mailto:supportjamesbrown@gmail.com' },
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>, label:'Hours', value: 'Mon – Sat, 9 am – 6 pm IST', sub:'Emergency line 24/7' },
+                                        ].map(row => (
+                                            <div key={row.label} className="flex items-start gap-3">
+                                                <div className="w-8 h-8 bg-white/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                    <svg className="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">{row.icon}</svg>
+                                                </div>
+                                                <div>
+                                                    <p className="text-xs text-blue-300/40 uppercase tracking-widest font-semibold mb-0.5">{row.label}</p>
+                                                    {row.href
+                                                        ? <a href={row.href} className="text-white text-sm font-medium hover:text-secondary transition-colors">{row.value}</a>
+                                                        : <p className="text-white text-sm font-medium">{row.value}</p>
+                                                    }
+                                                    {row.sub && <p className="text-blue-300/40 text-xs mt-0.5">{row.sub}</p>}
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="text-xs text-blue-300/50 uppercase tracking-widest font-semibold mb-1">Address</p>
-                                                <p className="text-white font-medium leading-relaxed">Khatipura, Jaipur<br />Rajasthan 302012, India</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-blue-300/50 uppercase tracking-widest font-semibold mb-1">Phone</p>
-                                                <a href="tel:+919799832489" className="text-white font-medium hover:text-secondary transition-colors">
-                                                    +91 97998 32489
-                                                </a>
-                                                <p className="text-blue-300/40 text-xs mt-0.5">Orders, partnerships, emergencies</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-blue-300/50 uppercase tracking-widest font-semibold mb-1">Email</p>
-                                                <a href="mailto:dbsingh490@rediffmail.com" className="text-white font-medium hover:text-secondary transition-colors">
-                                                    dbsingh490@rediffmail.com
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-blue-300/50 uppercase tracking-widest font-semibold mb-1">Business Hours</p>
-                                                <p className="text-white font-medium">Mon – Sat, 9 am – 6 pm IST</p>
-                                                <p className="text-blue-300/40 text-xs mt-0.5">Emergency line available 24/7</p>
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Right — quick contact cards */}
-                            <div className="bg-white/5 p-10 lg:p-14 flex flex-col justify-center gap-5">
-                                <p className="text-blue-200/60 text-sm font-medium mb-2">Reach us directly for any of these:</p>
-
-                                {[
-                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>, label: 'Place a Bulk Order',        detail: 'Call or WhatsApp +91 97998 32489', color: 'bg-secondary/10 border-secondary/20',   iconBg: 'bg-secondary/20 text-secondary' },
-                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-1"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>, label: 'Distribution Partnership',  detail: 'dbsingh490@rediffmail.com',         color: 'bg-amber-500/10 border-amber-400/20',  iconBg: 'bg-amber-500/20 text-amber-400' },
-                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>, label: 'Medical Emergency / ADR',   detail: '+91 97998 32489 — available 24/7', color: 'bg-red-500/10 border-red-400/20',       iconBg: 'bg-red-500/20 text-red-400' },
-                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>, label: 'Regulatory Queries',        detail: 'dbsingh490@rediffmail.com',         color: 'bg-purple-500/10 border-purple-400/20', iconBg: 'bg-purple-500/20 text-purple-400' },
-                                ].map((item) => (
-                                    <div key={item.label} className={`flex items-center gap-4 p-4 rounded-2xl border ${item.color} transition-all duration-200 hover:scale-[1.01]`}>
-                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${item.iconBg}`}>
-                                            {item.icon}
+                        {/* ── Secondary — Jaipur ── */}
+                        <div className="bg-primary rounded-3xl overflow-hidden shadow-2xl" style={{ opacity: 0.9 }}>
+                            <div className="p-8 lg:p-10 relative overflow-hidden">
+                                <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/8 rounded-full blur-[70px] pointer-events-none" />
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center flex-shrink-0">
+                                            <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 4.97 7 13 7 13s7-8.03 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
                                         </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-white" style={{ letterSpacing:'-0.01em' }}>Jaipur</h3>
+                                            <p className="text-accent text-xs font-bold uppercase tracking-widest">Regional Office</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {[
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>, label:'Address', value: 'Khatipura, Jaipur, Rajasthan 302012, India' },
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>, label:'Phone', value: '+91 97998 32489', href:'tel:+919799832489' },
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>, label:'Email', value: 'supportjamesbrown@gmail.com', href:'mailto:supportjamesbrown@gmail.com' },
+                                            { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>, label:'Hours', value: 'Mon – Sat, 9 am – 6 pm IST' },
+                                        ].map(row => (
+                                            <div key={row.label} className="flex items-start gap-3">
+                                                <div className="w-8 h-8 bg-white/8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                    <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">{row.icon}</svg>
+                                                </div>
+                                                <div>
+                                                    <p className="text-xs text-blue-300/40 uppercase tracking-widest font-semibold mb-0.5">{row.label}</p>
+                                                    {row.href
+                                                        ? <a href={row.href} className="text-white text-sm font-medium hover:text-accent transition-colors">{row.value}</a>
+                                                        : <p className="text-white text-sm font-medium">{row.value}</p>
+                                                    }
+                                                    {row.sub && <p className="text-blue-300/40 text-xs mt-0.5">{row.sub}</p>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Quick contact cards row below both offices */}
+                    <div className="mt-6 bg-primary rounded-3xl overflow-hidden shadow-xl">
+                        <div className="p-8 lg:p-10">
+                            <p className="text-blue-200/50 text-sm font-medium mb-5">Reach us directly for any of these:</p>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {[
+                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>, label:'Place a Bulk Order', detail:'Call +91 97998 32489', color:'bg-secondary/10 border-secondary/20', iconBg:'bg-secondary/20 text-secondary' },
+                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-1"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>, label:'Distribution', detail:'supportjamesbrown@gmail.com', color:'bg-amber-500/10 border-amber-400/20', iconBg:'bg-amber-500/20 text-amber-400' },
+                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>, label:'Emergency / ADR', detail:'+91 97998 32489 · 24/7', color:'bg-red-500/10 border-red-400/20', iconBg:'bg-red-500/20 text-red-400' },
+                                    { icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>, label:'Regulatory', detail:'supportjamesbrown@gmail.com', color:'bg-purple-500/10 border-purple-400/20', iconBg:'bg-purple-500/20 text-purple-400' },
+                                ].map(item => (
+                                    <div key={item.label} className={`flex items-center gap-3 p-4 rounded-2xl border ${item.color} transition-all duration-200 hover:scale-[1.01]`}>
+                                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${item.iconBg}`}>{item.icon}</div>
                                         <div>
                                             <p className="text-white font-semibold text-sm">{item.label}</p>
                                             <p className="text-blue-300/50 text-xs mt-0.5">{item.detail}</p>

@@ -150,11 +150,42 @@ const Home = () => (
                         Trusted by 500+ Healthcare Providers Worldwide
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl font-bold mb-8 text-white leading-tight animate-fade-in-up delay-100"
-                        style={{ letterSpacing:'-0.025em' }}>
-                        Medicines That{' '}
-                        <span className="text-shimmer">Heal. Protect. Restore.</span>
-                    </h1>
+                    {/* ── Company name branding ── */}
+                    <div className="text-4xl mb-6 animate-fade-in-up" style={{ animationDelay:'50ms' }}>
+    
+    <p 
+        className="text-white font-bold tracking-[0.22em] uppercase text-lg md:text-xl mb-2" 
+        style={{ color:'rgba(56,189,248,0.7)' }}
+    >
+        James Brown
+    </p>
+
+    <h2 
+        className="text-5xl md:text-7xl lg:text-7xl font-bold text-white leading-none" 
+        style={{ letterSpacing:'-0.03em' }}
+    >
+        Life Sciences
+    </h2>
+
+    <div className="flex items-center justify-center gap-3 mt-4">
+        <div style={{ height:'1px', width:40, background:'rgba(14,165,233,0.3)' }} />
+            <span 
+            className="text-xs font-semibold tracking-[0.2em] uppercase" 
+            style={{ color:'rgba(148,163,184,0.4)' }}
+            >
+                Est. 2009 · Gandhidham, Gujarat
+            </span>
+        <div style={{ height:'1px', width:40, background:'rgba(14,165,233,0.3)' }} />
+    </div>
+</div>
+
+<h1 
+    className="text-2xl md:text-3xl font-bold mb-8 text-white leading-tight animate-fade-in-up delay-100"
+    style={{ letterSpacing:'-0.025em' }}
+>
+    Medicines That{' '}
+    <span className="text-shimmer">Heal. Protect. Restore.</span>
+</h1>
 
                     <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up delay-200"
                         style={{ color:'rgba(148,163,184,0.85)' }}>

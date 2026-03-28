@@ -122,5 +122,5 @@ app.use((err, req, res, next) => {
 // ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
     console.log(`🚀  Server running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
-    console.log(`🔗  Allowed origins: ${allowedOrigins.join(', ')}`);
+    console.log(`🔗  Allowed origins are: ${allowedOrigins.join(', ')}`);
 });

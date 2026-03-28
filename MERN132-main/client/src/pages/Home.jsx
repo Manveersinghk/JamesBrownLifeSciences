@@ -151,41 +151,37 @@ const Home = () => (
                     </div>
 
                     {/* ── Company name branding ── */}
-                    <div className="text-4xl mb-6 animate-fade-in-up" style={{ animationDelay:'50ms' }}>
-    
-    <p 
-        className="text-white font-bold tracking-[0.22em] uppercase text-lg md:text-xl mb-2" 
-        style={{ color:'rgba(56,189,248,0.7)' }}
-    >
-        James Brown
-    </p>
+                    <div className="mb-8 animate-fade-in-up" style={{ animationDelay:'50ms' }}>
 
-    <h2 
-        className="text-5xl md:text-7xl lg:text-7xl font-bold text-white leading-none" 
-        style={{ letterSpacing:'-0.03em' }}
-    >
-        Life Sciences
-    </h2>
+                        {/* JAMES BROWN — massive, dominant */}
+                        <h1 className="font-bold text-white leading-none mb-2"
+                            style={{ fontSize:'clamp(3rem,10vw,7rem)', letterSpacing:'-0.03em' }}>
+                            James Brown
+                        </h1>
 
-    <div className="flex items-center justify-center gap-3 mt-4">
-        <div style={{ height:'1px', width:40, background:'rgba(14,165,233,0.3)' }} />
-            <span 
-            className="text-xs font-semibold tracking-[0.2em] uppercase" 
-            style={{ color:'rgba(148,163,184,0.4)' }}
-            >
-                Est. 2009 · Gandhidham, Gujarat
-            </span>
-        <div style={{ height:'1px', width:40, background:'rgba(14,165,233,0.3)' }} />
-    </div>
-</div>
+                        {/* LIFE SCIENCES — smaller, elegant */}
+                        <p className="font-semibold tracking-[0.35em] uppercase"
+                            style={{ fontSize:'clamp(0.9rem,2.5vw,1.5rem)', color:'rgba(56,189,248,0.8)', letterSpacing:'0.35em' }}>
+                            Life Sciences
+                        </p>
 
-<h1 
-    className="text-2xl md:text-3xl font-bold mb-8 text-white leading-tight animate-fade-in-up delay-100"
-    style={{ letterSpacing:'-0.025em' }}
->
-    Medicines That{' '}
-    <span className="text-shimmer">Heal. Protect. Restore.</span>
-</h1>
+                        {/* Divider + Est line */}
+                        <div className="flex items-center justify-center gap-4 mt-5">
+                            <div style={{ height:'1px', width:48, background:'linear-gradient(90deg,transparent,rgba(14,165,233,0.35))' }} />
+                            <span className="text-xs font-medium tracking-[0.18em] uppercase"
+                                style={{ color:'rgba(148,163,184,0.38)' }}>
+                                Est. 2009 · Gandhidham, Gujarat
+                            </span>
+                            <div style={{ height:'1px', width:48, background:'linear-gradient(90deg,rgba(14,165,233,0.35),transparent)' }} />
+                        </div>
+                    </div>
+
+                    {/* Tagline — smaller, supporting role */}
+                    <p className="font-semibold mb-3 animate-fade-in-up delay-100"
+                        style={{ fontSize:'clamp(1rem,2vw,1.35rem)', color:'rgba(226,232,240,0.6)', letterSpacing:'-0.01em' }}>
+                        Medicines That{' '}
+                        <span className="text-shimmer font-bold">Heal. Protect. Restore.</span>
+                    </p>
 
                     <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up delay-200"
                         style={{ color:'rgba(148,163,184,0.85)' }}>

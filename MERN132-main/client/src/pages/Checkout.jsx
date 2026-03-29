@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-const steps = ['Review Order', 'Delivery Details', 'Verify Phone', 'Confirm'];
+const steps = ['Review Order', 'Delivery Details', 'Phone Number', 'Confirm'];
 
 const Checkout = () => {
     const { cart, cartTotal, updateQuantity, removeFromCart, clearCart } = useCart();
@@ -21,12 +21,8 @@ const Checkout = () => {
         line1: '', line2: '', city: '', state: '', pincode: '', country: 'India',
     });
 
-    // Phone + OTP
-    const [phone,       setPhone]       = useState('');
-    const [otp,         setOtp]         = useState('');
-    const [otpSent,     setOtpSent]     = useState(false);
-    const [otpVerified, setOtpVerified] = useState(false);
-    const [otpTimer,    setOtpTimer]    = useState(0);
+    // Phone (no OTP)
+    const [phone, setPhone] = useState('');
 
     // Placed order
     const [placedOrder, setPlacedOrder] = useState(null);
@@ -58,56 +54,14 @@ const Checkout = () => {
         );
     }
 
-    // ── Send OTP ──────────────────────────────────────────────────────────────
-    const handleSendOtp = async () => {
-        const digits = phone.replace(/\D/g, '');
-        if (!phone || digits.length < 10) {
-            setError('Please enter a valid 10-digit Indian mobile number.');
-            return;
-        }
-        setLoading(true);
-        setError('');
-        try {
-            const res = await fetch(`${API}/api/otp/send`, {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-                body:    JSON.stringify({ phone }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error);
-            setOtpSent(true);
-            // Start 60s resend timer
-            setOtpTimer(60);
-            const interval = setInterval(() => {
-                setOtpTimer((t) => { if (t <= 1) { clearInterval(interval); return 0; } return t - 1; });
-            }, 1000);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // ── Verify OTP ────────────────────────────────────────────────────────────
-    const handleVerifyOtp = async () => {
-        if (!otp || otp.length !== 6) { setError('Please enter the 6-digit OTP.'); return; }
-        setLoading(true);
-        setError('');
-        try {
-            const res = await fetch(`${API}/api/otp/verify`, {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-                body:    JSON.stringify({ phone, otp }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error);
-            setOtpVerified(true);
-            setStep(3);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+    // ── Validate Indian phone number ──────────────────────────────────────────
+    const validatePhone = (raw) => {
+        const digits = raw.replace(/\D/g, '');
+        // Accept with or without leading +91 / 91 / 0
+        let num = digits;
+        if (num.startsWith('91') && num.length === 12) num = num.slice(2);
+        if (num.startsWith('0')  && num.length === 11) num = num.slice(1);
+        return /^[6-9]\d{9}$/.test(num) ? num : null;
     };
 
     // ── Place Order ───────────────────────────────────────────────────────────
@@ -321,52 +275,46 @@ const Checkout = () => {
                                     setError(''); setStep(2);
                                 }}
                                 className="flex-[2] bg-secondary text-white py-3.5 rounded-xl font-bold hover:bg-secondary-dark transition">
-                                Continue to Phone Verification →
+                                Continue to Phone Number →
                             </button>
                         </div>
                     </div>
                 )}
 
-                {/* ── Step 2: Phone OTP ── */}
+                {/* ── Step 2: Phone Number ── */}
                 {step === 2 && (
                     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                         <div className="bg-primary px-7 py-5">
-                            <h2 className="text-white font-bold">Verify Your Phone Number</h2>
-                            <p className="text-blue-200/60 text-xs">We'll send a 6-digit OTP to confirm your delivery contact</p>
+                            <h2 className="text-white font-bold">Contact Phone Number</h2>
+                            <p className="text-blue-200/60 text-xs">Your 10-digit Indian mobile number for delivery updates</p>
                         </div>
                         <div className="p-7 space-y-6">
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Phone Number *</label>
-                                <div className="flex gap-3">
-                                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                                        placeholder="+91 9876543210" disabled={otpSent}
-                                        className={`${inputCls} flex-1 ${otpSent ? 'opacity-60 cursor-not-allowed' : ''}`} />
-                                    <button onClick={handleSendOtp} disabled={loading || (otpSent && otpTimer > 0)}
-                                        className="px-5 py-3 bg-secondary text-white rounded-xl font-bold text-sm hover:bg-secondary-dark transition disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
-                                        {loading ? '...' : otpSent ? (otpTimer > 0 ? `Resend (${otpTimer}s)` : 'Resend OTP') : 'Send OTP'}
-                                    </button>
-                                </div>
-                                <p className="text-xs text-gray-400 mt-2">Enter your 10-digit Indian mobile number. e.g. 9876543210</p>
+                                <input
+                                    type="tel"
+                                    value={phone}
+                                    onChange={(e) => { setPhone(e.target.value); setError(''); }}
+                                    placeholder="9876543210"
+                                    className={inputCls}
+                                    maxLength={13}
+                                />
+                                <p className="text-xs text-gray-400 mt-2">Enter a valid 10-digit Indian mobile number (starts with 6–9).</p>
                             </div>
-
-                            {otpSent && (
-                                <div className="animate-fade-in-up">
-                                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Enter OTP *</label>
-                                    <div className="flex gap-3">
-                                        <input type="text" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                            placeholder="6-digit OTP" maxLength={6}
-                                            className={`${inputCls} flex-1 text-center text-xl font-bold tracking-[0.5em]`} />
-                                        <button onClick={handleVerifyOtp} disabled={loading || otp.length !== 6}
-                                            className="px-5 py-3 bg-green-500 text-white rounded-xl font-bold text-sm hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                                            {loading ? '...' : 'Verify'}
-                                        </button>
-                                    </div>
-                                    <p className="text-xs text-green-600 mt-2">✓ OTP sent to {phone}</p>
-                                </div>
-                            )}
                         </div>
-                        <div className="p-7 pt-0">
-                            <button onClick={() => setStep(1)} className="w-full border border-gray-200 text-gray-600 py-3.5 rounded-xl font-semibold hover:border-gray-300 transition text-sm">← Back to Address</button>
+                        <div className="p-7 pt-0 flex gap-3">
+                            <button onClick={() => setStep(1)} className="flex-1 border border-gray-200 text-gray-600 py-3.5 rounded-xl font-semibold hover:border-gray-300 transition text-sm">← Back</button>
+                            <button
+                                onClick={() => {
+                                    const valid = validatePhone(phone);
+                                    if (!valid) { setError('Please enter a valid 10-digit Indian mobile number (starting with 6–9).'); return; }
+                                    setPhone(valid); // store cleaned 10-digit number
+                                    setError('');
+                                    setStep(3);
+                                }}
+                                className="flex-[2] bg-secondary text-white py-3.5 rounded-xl font-bold hover:bg-secondary-dark transition">
+                                Continue to Confirm →
+                            </button>
                         </div>
                     </div>
                 )}
@@ -404,10 +352,7 @@ const Checkout = () => {
                                 </div>
                                 <div>
                                     <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Contact</p>
-                                    <p className="text-gray-700 font-medium flex items-center gap-1">
-                                        {phone}
-                                        <span className="text-green-500 text-xs font-bold bg-green-50 px-2 py-0.5 rounded-full ml-1">✓ Verified</span>
-                                    </p>
+                                    <p className="text-gray-700 font-medium">+91 {phone}</p>
                                     <p className="text-gray-500 mt-1">{user.email}</p>
                                 </div>
                             </div>

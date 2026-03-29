@@ -7,17 +7,8 @@ const Footer = () => {
                     {/* Brand */}
                     <div className="md:col-span-2">
                         <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-9 h-9 bg-gradient-to-br from-primary-light to-primary-dark border border-secondary/30 rounded-lg flex items-center justify-center">
-                                <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
-                                    <path d="M8 3C8 3 10 6 13 6C16 6 18 3 18 3" stroke="#0EA5E9" strokeWidth="1.8" strokeLinecap="round"/>
-                                    <path d="M8 23C8 23 10 20 13 20C16 20 18 23 18 23" stroke="#F59E0B" strokeWidth="1.8" strokeLinecap="round"/>
-                                    <path d="M9.5 3.5 C7 7 7 10 9.5 13 C12 16 12 19 9.5 22.5" stroke="#0EA5E9" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
-                                    <path d="M16.5 3.5 C19 7 19 10 16.5 13 C14 16 14 19 16.5 22.5" stroke="#F59E0B" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
-                                    <line x1="9" y1="7.5" x2="17" y2="7.5" stroke="rgba(14,165,233,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                    <line x1="8.2" y1="11" x2="17.8" y2="11" stroke="rgba(245,158,11,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                    <line x1="8.2" y1="15" x2="17.8" y2="15" stroke="rgba(14,165,233,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                    <line x1="9" y1="18.5" x2="17" y2="18.5" stroke="rgba(245,158,11,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                </svg>
+                            <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center p-1 shadow-md shadow-secondary/10">
+                                <img src="/logojb.svg" alt="JBLS Logo" className="w-full h-full object-contain" />
                             </div>
                             <div>
                                 <h3 className="text-lg font-serif font-bold leading-tight">James Brown</h3>

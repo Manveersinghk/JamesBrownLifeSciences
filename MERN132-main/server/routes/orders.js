@@ -1,6 +1,5 @@
 const router  = require('express').Router();
 const Order   = require('../models/Order');
-const OTP     = require('../models/OTP');
 const { protect } = require('../middleware/authMiddleware');
 const { sendOrderNotification } = require('../config/mailer');
 const rateLimit = require('express-rate-limit');
@@ -11,25 +10,32 @@ const orderLimiter = rateLimit({
     message: { error: 'Too many orders. Please try again later.' },
 });
 
+// ── Helper: validate 10-digit Indian mobile number ───────────────────────────
+const validateIndianPhone = (raw) => {
+    const digits = (raw || '').replace(/\D/g, '');
+    let num = digits;
+    if (num.startsWith('91') && num.length === 12) num = num.slice(2);
+    if (num.startsWith('0')  && num.length === 11) num = num.slice(1);
+    return /^[6-9]\d{9}$/.test(num) ? num : null;
+};
+
 // ── POST /api/orders — place a new order ──────────────────────────────────────
 router.post('/', protect, orderLimiter, async (req, res) => {
     const { phone, address, items, notes } = req.body;
 
-    // ── Validate inputs ───────────────────────────────────────────────────────
-    if (!phone || !address || !items || !Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ error: 'Phone, address, and at least one medicine are required.' });
+    // ── Validate phone ────────────────────────────────────────────────────────
+    const cleanPhone = validateIndianPhone(phone);
+    if (!cleanPhone) {
+        return res.status(400).json({ error: 'Please provide a valid 10-digit Indian mobile number (starting with 6–9).' });
     }
 
-    const cleanPhone = phone.replace(/\s/g, '');
-
-    // ── Verify OTP was completed for this phone ───────────────────────────────
-    const otpRecord = await OTP.findOne({ phone: cleanPhone, verified: true });
-    if (!otpRecord) {
-        return res.status(400).json({ error: 'Phone number not verified. Please complete OTP verification.' });
+    // ── Validate items ────────────────────────────────────────────────────────
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: 'At least one medicine is required.' });
     }
 
     // ── Validate address ──────────────────────────────────────────────────────
-    const { line1, city, state, pincode, country } = address;
+    const { line1, city, state, pincode, country } = address || {};
     if (!line1 || !city || !state || !pincode) {
         return res.status(400).json({ error: 'Please provide complete delivery address.' });
     }
@@ -63,16 +69,13 @@ router.post('/', protect, orderLimiter, async (req, res) => {
             customerName:  `${req.user.firstName} ${req.user.lastName}`,
             email:         req.user.email,
             phone:         cleanPhone,
-            phoneVerified: true,
+            phoneVerified: false,
             address: { line1, line2: address.line2 || '', city, state, pincode, country: country || 'India' },
             items:         processedItems,
             totalAmount,
             notes:         notes || '',
             ipAddress:     req.ip,
         });
-
-        // Delete the used OTP
-        await OTP.deleteOne({ phone: cleanPhone, verified: true });
 
         // Email notification to company
         sendOrderNotification(order).catch((err) =>
@@ -114,26 +117,6 @@ router.get('/my', protect, async (req, res) => {
     }
 });
 
-// ── GET /api/orders/:orderNumber — get single order ───────────────────────────
-router.get('/:orderNumber', protect, async (req, res) => {
-    try {
-        const order = await Order.findOne({
-            orderNumber: req.params.orderNumber,
-            userId: req.user._id,      // users can only see their own orders
-        });
-
-        if (!order) {
-            return res.status(404).json({ error: 'Order not found.' });
-        }
-
-        return res.json({ success: true, order });
-    } catch (err) {
-        return res.status(500).json({ error: 'Failed to fetch order.' });
-    }
-});
-
-module.exports = router;
-
 // ── GET /api/orders/admin/all — admin sees all orders ─────────────────────────
 router.get('/admin/all', protect, async (req, res) => {
     if (req.user.role !== 'Admin') {
@@ -172,3 +155,23 @@ router.patch('/admin/:orderNumber/status', protect, async (req, res) => {
         return res.status(500).json({ error: 'Failed to update status.' });
     }
 });
+
+// ── GET /api/orders/:orderNumber — get single order ───────────────────────────
+router.get('/:orderNumber', protect, async (req, res) => {
+    try {
+        const order = await Order.findOne({
+            orderNumber: req.params.orderNumber,
+            userId: req.user._id,
+        });
+
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found.' });
+        }
+
+        return res.json({ success: true, order });
+    } catch (err) {
+        return res.status(500).json({ error: 'Failed to fetch order.' });
+    }
+});
+
+module.exports = router;

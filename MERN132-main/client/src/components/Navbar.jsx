@@ -46,17 +46,8 @@ const Navbar = () => {
 
                     {/* Logo */}
                     <Link to="/" className="flex items-center space-x-3 group">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-secondary/20 bg-gradient-to-br from-primary-light to-primary-dark border border-secondary/30 group-hover:border-secondary/60 transition-all duration-300">
-                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-                                <path d="M8 3C8 3 10 6 13 6C16 6 18 3 18 3" stroke="#0EA5E9" strokeWidth="1.8" strokeLinecap="round"/>
-                                <path d="M8 23C8 23 10 20 13 20C16 20 18 23 18 23" stroke="#F59E0B" strokeWidth="1.8" strokeLinecap="round"/>
-                                <path d="M9.5 3.5 C7 7 7 10 9.5 13 C12 16 12 19 9.5 22.5" stroke="#0EA5E9" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
-                                <path d="M16.5 3.5 C19 7 19 10 16.5 13 C14 16 14 19 16.5 22.5" stroke="#F59E0B" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
-                                <line x1="9" y1="7.5" x2="17" y2="7.5" stroke="rgba(14,165,233,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                <line x1="8.2" y1="11" x2="17.8" y2="11" stroke="rgba(245,158,11,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                <line x1="8.2" y1="15" x2="17.8" y2="15" stroke="rgba(14,165,233,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                                <line x1="9" y1="18.5" x2="17" y2="18.5" stroke="rgba(245,158,11,0.5)" strokeWidth="1.2" strokeLinecap="round"/>
-                            </svg>
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-secondary/20 bg-white p-1 group-hover:shadow-secondary/40 transition-all duration-300">
+                            <img src="/logojb.svg" alt="JBLS Logo" className="w-full h-full object-contain" />
                         </div>
                         <div className="flex flex-col leading-tight">
                             <span className="text-white font-bold text-xl tracking-wide group-hover:text-secondary-light transition-colors">James Brown</span>

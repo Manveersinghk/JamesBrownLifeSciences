@@ -23,27 +23,26 @@ const isProd = process.env.NODE_ENV === 'production';
 // ── Security headers ──────────────────────────────────────────────────────────
 app.use(
     helmet({
-        contentSecurityPolicy: false, // Handled by frontend build
+        contentSecurityPolicy: false,
         crossOriginEmbedderPolicy: false,
     })
 );
 
-// ── CORS — only allow your real domain in production ──────────────────────────
+// ── CORS ──────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
-    process.env.CLIENT_ORIGIN,            // e.g. https://www.jamesbrownls.com
-    'http://localhost:5173',               // Vite dev server
+    process.env.CLIENT_ORIGIN,
+    'http://localhost:5173',
     'http://localhost:3000',
 ].filter(Boolean);
 
 app.use(
     cors({
         origin: (origin, callback) => {
-            // Allow requests with no origin (mobile apps, curl, Postman)
             if (!origin) return callback(null, true);
             if (allowedOrigins.includes(origin)) return callback(null, true);
             callback(new Error(`CORS: origin ${origin} not allowed`));
         },
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST', 'PATCH'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
     })
@@ -56,7 +55,7 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 // ── NoSQL injection protection ────────────────────────────────────────────────
 app.use(mongoSanitize());
 
-// ── Trust proxy (required for rate limiting behind Render's load balancer) ───
+// ── Trust proxy ───────────────────────────────────────────────────────────────
 app.set('trust proxy', 1);
 
 // ── Database ──────────────────────────────────────────────────────────────────
@@ -77,14 +76,15 @@ mongoose.connection.on('disconnected', () =>
 
 // ── API routes ────────────────────────────────────────────────────────────────
 const { apiLimiter } = require('./middleware/rateLimiter');
-app.use('/api', apiLimiter);                               // Global API rate limit
+app.use('/api', apiLimiter);
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/careers', require('./routes/career'));
 app.use('/api/chat',    require('./routes/chat'));
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/otp',    require('./routes/otp'));
-app.use('/api/orders', require('./routes/orders'));
-// ── Health check (used by Render to verify the server is alive) ───────────────
+app.use('/api/auth',    require('./routes/auth'));
+app.use('/api/orders',  require('./routes/orders'));
+// OTP route removed — phone is validated as 10-digit Indian number on order creation
+
+// ── Health check ──────────────────────────────────────────────────────────────
 app.get('/health', (req, res) =>
     res.json({
         status: 'ok',
@@ -98,7 +98,6 @@ app.get('/health', (req, res) =>
 if (isProd) {
     const distPath = path.join(__dirname, '../client/dist');
     app.use(express.static(distPath));
-    // All non-API routes → React app (handles React Router client-side routing)
     app.get('*', (req, res) => {
         if (req.path.startsWith('/api')) return res.status(404).json({ error: 'Not found' });
         res.sendFile(path.join(distPath, 'index.html'));
@@ -108,7 +107,6 @@ if (isProd) {
 
 // ── Global error handler ──────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
-    // CORS errors
     if (err.message && err.message.startsWith('CORS')) {
         return res.status(403).json({ error: err.message });
     }
@@ -117,7 +115,6 @@ app.use((err, req, res, next) => {
         error: isProd ? 'Something went wrong. Please try again.' : err.message,
     });
 });
-
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {

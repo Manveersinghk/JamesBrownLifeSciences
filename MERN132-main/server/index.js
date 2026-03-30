@@ -31,6 +31,8 @@ app.use(
 // ── CORS ──────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
     process.env.CLIENT_ORIGIN,
+    process.env.CLIENT_ORIGIN_CUSTOM,
+    process.env.CLIENT_ORIGIN_CUSTOM_WWW,
     'http://localhost:5173',
     'http://localhost:3000',
 ].filter(Boolean);
@@ -93,16 +95,6 @@ app.get('/health', (req, res) =>
     })
 );
 
-// ── Serve React frontend in production ────────────────────────────────────────
-if (isProd) {
-    const distPath = path.join(__dirname, '../client/dist');
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-        if (req.path.startsWith('/api')) return res.status(404).json({ error: 'Not found' });
-        res.sendFile(path.join(distPath, 'index.html'));
-    });
-    console.log(`🌐  Serving React frontend from ${distPath}`);
-}
 
 // ── Global error handler ──────────────────────────────────────────────────────
 app.use((err, req, res, next) => {

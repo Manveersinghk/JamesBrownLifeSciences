@@ -1,26 +1,19 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// ── Transporter ────────────────────────────────────────────────────────────────
-// Works with Gmail, Outlook, or any SMTP provider.
-// Set these in your .env / Render environment variables.
-const createTransporter = () =>
-    nodemailer.createTransport({
-        host:   process.env.SMTP_HOST   || 'smtp.gmail.com',
-        port:   parseInt(process.env.SMTP_PORT || '587'),
-        secure: process.env.SMTP_SECURE === 'true', // true for 465, false for others
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,   // Use an App Password for Gmail
-        },
-    });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = `"JBLS Website" <${process.env.SMTP_USER}>`;
-const ADMIN = process.env.ADMIN_EMAIL || process.env.SMTP_USER;
+const FROM_WEBSITE = 'JBLS Website <onboarding@resend.dev>';
+const FROM_ORDERS  = 'JBLS Orders <onboarding@resend.dev>';
+const FROM_JBLS    = 'James Brown Life Sciences <onboarding@resend.dev>';
+
+const ADMIN  = process.env.ADMIN_EMAIL  || process.env.SMTP_USER;
+const HR     = process.env.HR_EMAIL     || ADMIN;
+const ORDERS = process.env.ORDERS_EMAIL || ADMIN;
 
 // ── Contact notification ───────────────────────────────────────────────────────
 const sendContactNotification = async (data) => {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-        console.warn('⚠️  SMTP not configured — skipping contact email notification');
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('⚠️  RESEND_API_KEY not configured — skipping contact email');
         return;
     }
 
@@ -33,12 +26,10 @@ const sendContactNotification = async (data) => {
         general:     '💬 General Enquiry',
     };
 
-    const transporter = createTransporter();
-
     // Notify admin
-    await transporter.sendMail({
-        from: FROM,
-        to:   ADMIN,
+    await resend.emails.send({
+        from:    FROM_WEBSITE,
+        to:      ADMIN,
         subject: `${data.urgent ? '🚨 URGENT — ' : ''}New ${typeLabels[data.inquiryType] || 'Contact'} from ${data.firstName} ${data.lastName}`,
         html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -69,9 +60,9 @@ const sendContactNotification = async (data) => {
     });
 
     // Auto-reply to sender
-    await transporter.sendMail({
-        from: FROM,
-        to:   data.email,
+    await resend.emails.send({
+        from:    FROM_WEBSITE,
+        to:      data.email,
         subject: `We received your message — James Brown Life Sciences`,
         html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -85,7 +76,7 @@ const sendContactNotification = async (data) => {
                     <div style="margin:20px 0;padding:16px;background:#EFF6FF;border-left:4px solid #0EA5E9;border-radius:0 8px 8px 0">
                         <p style="margin:0;font-size:13px;color:#1E40AF">Your reference: <strong>${data.subject}</strong></p>
                     </div>
-                    <p style="color:#94A3B8;font-size:12px;margin:20px 0 0">James Brown Life Sciences · Khatipura, Jaipur, Rajasthan 302012 · dbsingh490@rediffmail.com</p>
+                    <p style="color:#94A3B8;font-size:12px;margin:20px 0 0">James Brown Life Sciences · Khatipura, Jaipur, Rajasthan 302012</p>
                 </div>
             </div>
         `,
@@ -96,17 +87,15 @@ const sendContactNotification = async (data) => {
 
 // ── Career notification ────────────────────────────────────────────────────────
 const sendCareerNotification = async (data) => {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-        console.warn('⚠️  SMTP not configured — skipping career email notification');
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('⚠️  RESEND_API_KEY not configured — skipping career email');
         return;
     }
 
-    const transporter = createTransporter();
-
-    // Notify admin/HR
-    await transporter.sendMail({
-        from: FROM,
-        to:   process.env.HR_EMAIL || ADMIN,
+    // Notify HR
+    await resend.emails.send({
+        from:    FROM_WEBSITE,
+        to:      HR,
         subject: `New Application — ${data.position} | ${data.firstName} ${data.lastName}`,
         html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -146,9 +135,9 @@ const sendCareerNotification = async (data) => {
     });
 
     // Auto-reply to applicant
-    await transporter.sendMail({
-        from: FROM,
-        to:   data.email,
+    await resend.emails.send({
+        from:    FROM_WEBSITE,
+        to:      data.email,
         subject: `Application Received — ${data.position} | James Brown Life Sciences`,
         html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -169,26 +158,21 @@ const sendCareerNotification = async (data) => {
                             <li>Offer & onboarding</li>
                         </ol>
                     </div>
-                    <p style="color:#94A3B8;font-size:12px;margin:20px 0 0">James Brown Life Sciences · Careers Team · careers@jamesbrownls.com</p>
+                    <p style="color:#94A3B8;font-size:12px;margin:20px 0 0">James Brown Life Sciences · Careers Team</p>
                 </div>
             </div>
         `,
     });
 
     console.log(`📧 Career notification sent for ${data.email} — ${data.position}`);
-};// ── ADD THIS FUNCTION to your existing server/config/mailer.js ───────────────
-// Paste this BEFORE the module.exports line at the bottom
+};
 
+// ── Order notification ─────────────────────────────────────────────────────────
 const sendOrderNotification = async (order) => {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-        console.warn('⚠️  SMTP not configured — skipping order email');
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('⚠️  RESEND_API_KEY not configured — skipping order email');
         return;
     }
-
-
-    const transporter = createTransporter();
-    const FROM  = `"JBLS Orders" <${process.env.SMTP_USER}>`;
-    const ADMIN = process.env.ORDERS_EMAIL || process.env.ADMIN_EMAIL || process.env.SMTP_USER;
 
     const itemsHtml = order.items.map((item) => `
         <tr>
@@ -201,9 +185,9 @@ const sendOrderNotification = async (order) => {
     `).join('');
 
     // Notify company
-    await transporter.sendMail({
-        from: FROM,
-        to:   ADMIN,
+    await resend.emails.send({
+        from:    FROM_ORDERS,
+        to:      ORDERS,
         subject: `🛒 New Order ${order.orderNumber} — ${order.customerName}`,
         html: `
             <div style="font-family:sans-serif;max-width:650px;margin:0 auto">
@@ -226,16 +210,14 @@ const sendOrderNotification = async (order) => {
                             <p style="margin:4px 0 0;font-weight:700;color:#F59E0B;font-size:15px">Pending</p>
                         </div>
                     </div>
-
                     <h3 style="font-size:14px;color:#1E293B;margin:0 0 8px">Customer Details</h3>
                     <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px">
                         <tr><td style="padding:6px 0;color:#64748B;width:130px">Name</td><td style="padding:6px 0;font-weight:600">${order.customerName}</td></tr>
                         <tr><td style="padding:6px 0;color:#64748B">Email</td><td style="padding:6px 0"><a href="mailto:${order.email}">${order.email}</a></td></tr>
-                        <tr><td style="padding:6px 0;color:#64748B">Phone (verified)</td><td style="padding:6px 0;font-weight:600">${order.phone} ✅</td></tr>
+                        <tr><td style="padding:6px 0;color:#64748B">Phone</td><td style="padding:6px 0;font-weight:600">${order.phone}</td></tr>
                         <tr><td style="padding:6px 0;color:#64748B">Delivery Address</td><td style="padding:6px 0">${order.address.line1}${order.address.line2 ? ', ' + order.address.line2 : ''}, ${order.address.city}, ${order.address.state} ${order.address.pincode}, ${order.address.country}</td></tr>
                         ${order.notes ? `<tr><td style="padding:6px 0;color:#64748B">Notes</td><td style="padding:6px 0">${order.notes}</td></tr>` : ''}
                     </table>
-
                     <h3 style="font-size:14px;color:#1E293B;margin:0 0 8px">Order Items</h3>
                     <table style="width:100%;border-collapse:collapse;font-size:13px">
                         <thead><tr style="background:#F1F5F9">
@@ -258,9 +240,9 @@ const sendOrderNotification = async (order) => {
     });
 
     // Confirm to customer
-    await transporter.sendMail({
-        from: FROM,
-        to:   order.email,
+    await resend.emails.send({
+        from:    FROM_ORDERS,
+        to:      order.email,
         subject: `Order Confirmed — ${order.orderNumber} | James Brown Life Sciences`,
         html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -276,7 +258,7 @@ const sendOrderNotification = async (order) => {
                         <p style="margin:4px 0 0;font-size:13px;color:#166534">Total: ₹${order.totalAmount.toLocaleString('en-IN')} · ${order.items.length} item${order.items.length !== 1 ? 's' : ''}</p>
                     </div>
                     <p style="color:#475569;font-size:14px;line-height:1.6">Delivering to: <strong>${order.address.line1}, ${order.address.city}, ${order.address.state} ${order.address.pincode}</strong></p>
-                    <p style="color:#94A3B8;font-size:12px;margin:20px 0 0">For queries: dbsingh490@rediffmail.com | +91 97998 32489</p>
+                    <p style="color:#94A3B8;font-size:12px;margin:20px 0 0">For queries: supportjamesbrown@gmail.com | +91 97998 32489</p>
                 </div>
             </div>
         `,
@@ -285,14 +267,13 @@ const sendOrderNotification = async (order) => {
     console.log(`📧 Order notification sent for ${order.orderNumber}`);
 };
 
-// ── Welcome email on registration ─────────────────────────────────────────────
+// ── Welcome email ──────────────────────────────────────────────────────────────
 const sendWelcomeEmail = async (user) => {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) return;
-    const transporter = createTransporter();
-    const FROM_JBLS = `"James Brown Life Sciences" <${process.env.SMTP_USER}>`;
-    await transporter.sendMail({
-        from: FROM_JBLS,
-        to:   user.email,
+    if (!process.env.RESEND_API_KEY) return;
+
+    await resend.emails.send({
+        from:    FROM_JBLS,
+        to:      user.email,
         subject: `Welcome to James Brown Life Sciences, ${user.firstName}!`,
         html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -318,6 +299,7 @@ const sendWelcomeEmail = async (user) => {
             </div>
         `,
     });
+
     console.log(`📧 Welcome email sent to ${user.email}`);
 };
 

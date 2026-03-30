@@ -2,9 +2,9 @@ const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_WEBSITE = 'JBLS Website <onboarding@resend.dev>';
-const FROM_ORDERS  = 'JBLS Orders <onboarding@resend.dev>';
-const FROM_JBLS    = 'James Brown Life Sciences <onboarding@resend.dev>';
+const FROM_WEBSITE = 'JBLS Website <noreply@jamesbrownlifesciences.com >';
+const FROM_ORDERS  = 'JBLS Orders <noreply@jamesbrownlifesciences.com >';
+const FROM_JBLS    = 'James Brown Life Sciences <noreply@jamesbrownlifesciences.com >';
 
 const ADMIN  = process.env.ADMIN_EMAIL  || process.env.SMTP_USER;
 const HR     = process.env.HR_EMAIL     || ADMIN;
